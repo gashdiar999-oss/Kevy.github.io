@@ -5,146 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KEVY | #1 Indigo Executor</title>
     <style>
-        /* XENO INDIGO THEME */
-        :root {
-            --accent: #6366f1;
-            --bg: #050508;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* The Rocket Background */
-        #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* Main Content Layer */
-        .ui-wrapper {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .glass-card {
-            background: rgba(10, 10, 15, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 50px;
-            max-width: 900px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        :root { --primary: #6366f1; --bg: #050508; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        
+        .wrapper { display: flex; flex-direction: column; align-items: center; padding: 80px 20px; text-align: center; }
+        
+        .glass {
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 50px 30px;
+            max-width: 900px; width: 100%;
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
         }
 
         h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            margin: 0;
-            background: linear-gradient(to bottom, #ffffff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+            font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; margin: 0;
+            background: linear-gradient(to bottom, #fff 30%, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
         }
 
-        .status {
+        .status-pill {
+            background: rgba(74, 222, 128, 0.1);
             color: #4ade80;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
             font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            display: inline-block;
+            margin-bottom: 20px;
         }
+
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 30px 0; }
 
         .btn {
-            background: var(--accent);
-            color: white;
-            padding: 18px 45px;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-block;
-            transition: 0.3s;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-            margin: 20px 0;
+            padding: 18px 40px; border-radius: 12px; font-weight: 800;
+            text-decoration: none; transition: 0.3s;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 40px var(--accent);
+        .btn-main {
+            background: var(--primary); color: white;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
         }
 
-        /* Your Image Placement */
-        .exec-img {
-            width: 100%;
-            max-width: 750px;
-            border-radius: 15px;
-            margin-top: 30px;
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 0 40px var(--primary); }
+
+        .btn-discord {
+            background: #5865F2; color: white;
+        }
+
+        .screenshot {
+            width: 100%; max-width: 800px; border-radius: 15px;
             border: 1px solid rgba(99, 102, 241, 0.3);
-            display: block; /* Ensures it's not hidden */
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas"></canvas>
+    <canvas id="rockets"></canvas>
 
-    <div class="ui-wrapper">
-        <div class="glass-card">
-            <div class="status">● UNDETECTED</div>
+    <div class="wrapper">
+        <div class="glass">
+            <div class="status-pill">STATUS: UNDETECTED</div>
             <h1>KEVY</h1>
-            <p style="color: #888; font-size: 1.2rem;">Next-generation execution. Fast. Stable. Indigo.</p>
+            <p style="color: #94a3b8; font-size: 1.2rem; margin-top: 10px;">The next generation of execution.</p>
             
-            <a href="kevy.zip" class="btn" download>DOWNLOAD EXECUTOR</a>
-
-            <img src="kevy.png" alt="Kevy UI" class="exec-img">
+            <div class="btn-group">
+                <a href="YOUR_EXTERNAL_LINK_HERE" class="btn btn-main">DOWNLOAD (.ZIP)</a>
+                <a href="YOUR_DISCORD_LINK" class="btn btn-discord">JOIN DISCORD</a>
+            </div>
+            
+            <img src="kevy.png" alt="Kevy Interface" class="screenshot">
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const c = document.getElementById('rockets');
+        const x = c.getContext('2d');
+        function res() { c.width = window.innerWidth; c.height = window.innerHeight; }
+        window.onresize = res; res();
 
-        let particles = [];
-        for(let i = 0; i < 50; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                v: Math.random() * 2 + 0.5,
-                l: Math.random() * 30 + 10
-            });
-        }
+        let p = Array.from({length: 40}, () => ({
+            x: Math.random() * c.width,
+            y: Math.random() * c.height,
+            s: Math.random() * 1.5 + 0.5,
+            l: Math.random() * 40 + 10
+        }));
 
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#6366f1';
-            ctx.lineWidth = 1;
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p.x, p.y + p.l);
-                ctx.stroke();
-                p.y -= p.v;
-                if(p.y < -50) p.y = canvas.height + 50;
+            x.clearRect(0,0,c.width,c.height);
+            x.strokeStyle = 'rgba(99, 102, 241, 0.4)'; x.lineWidth = 1;
+            p.forEach(i => {
+                x.beginPath(); x.moveTo(i.x, i.y); x.lineTo(i.x, i.y+i.l); x.stroke();
+                i.y -= i.s; if(i.y < -50) i.y = c.height + 50;
             });
             requestAnimationFrame(draw);
         }
