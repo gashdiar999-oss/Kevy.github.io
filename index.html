@@ -1,74 +1,142 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEVY | #1 Indigo Executor</title>
+    <title>KEVY | Elite</title>
     <style>
-        :root { --primary: #6366f1; --bg: #050508; }
-        body { 
-            margin: 0; background: var(--bg); color: white; 
-            font-family: 'Inter', 'Segoe UI', sans-serif; overflow: hidden; 
+        :root { --primary: #6366f1; --bg: #030305; --card: #0a0a0f; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        /* Navigation */
+        nav { display: flex; justify-content: space-between; padding: 25px 10%; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
+
+        /* Hero */
+        .hero { text-align: center; padding: 80px 20px 40px; }
+        h1 { font-size: clamp(2.5rem, 8vw, 4rem); margin: 0; font-weight: 800; }
+        h1 span { color: #888; font-weight: 300; }
+
+        /* The Xeno-Style Split Grid */
+        .split-container { 
+            display: grid; 
+            grid-template-columns: 1.5fr 1fr; 
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
         }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-        .vignette { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%); 
-            z-index: 2; pointer-events: none; 
+
+        .panel { 
+            background: var(--card); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; 
+            padding: 30px; 
+            text-align: left;
         }
-        .wrapper { 
-            position: relative; z-index: 10; display: flex; 
-            align-items: center; justify-content: center; height: 100vh; 
+
+        .panel h2 { margin-top: 0; font-size: 1.5rem; }
+        .panel p { color: #777; line-height: 1.5; }
+
+        /* Left Side: Image Showcase */
+        .executor-preview {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+            margin-top: 20px;
         }
-        .card { 
-            background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px); 
-            border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 30px; 
-            padding: 40px; width: 85%; max-width: 800px; text-align: center; 
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+
+        /* Right Side: Performance Stats */
+        .stat-bar {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.02);
         }
-        h1 { 
-            font-size: 5rem; font-weight: 900; margin: 0; letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff, var(--primary)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+
+        .icon-box {
+            width: 40px; height: 40px; 
+            background: rgba(99, 102, 241, 0.1); 
+            border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-weight: bold;
         }
-        .status { color: #4ade80; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px; display: block; }
+
+        .stat-info span { display: block; font-size: 0.8rem; color: #555; }
+        .stat-info b { font-size: 1rem; color: #eee; }
+
+        /* Download Section */
+        .download-area { text-align: center; padding: 60px 20px; }
         .btn { 
-            background: var(--primary); color: white; padding: 18px 45px; 
+            background: var(--primary); color: white; padding: 20px 60px; 
             border-radius: 12px; font-weight: 800; text-decoration: none; 
-            display: inline-block; margin: 25px 0; transition: 0.3s; 
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); 
+            display: inline-block; transition: 0.3s;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
         }
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 45px var(--primary); }
-        .preview { width: 100%; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 50px var(--primary); }
+
+        @media (max-width: 900px) { .split-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="vignette"></div>
-    <canvas id="c"></canvas>
-    <div class="wrapper">
-        <div class="card">
-            <span class="status">● UNDETECTED</span>
-            <h1>KEVY</h1>
-            <p style="color:#888;">Next-gen execution. Indigo speed.</p>
-            
-            <a href="https://www.mediafire.com/file/90ns15tmh5x57n7/Kevy.zip/file" class="btn">DOWNLOAD NOW</a>
 
-            <img src="kevy.png" alt="Executor UI" class="preview">
+    <nav>
+        <div class="logo">KEVY<span>.</span></div>
+        <div style="font-size: 0.9rem; color: #444;">#1 Indigo Executor</div>
+    </nav>
+
+    <div class="hero">
+        <h1>Experience the Best <span>Fast</span> Executor</h1>
+        <p style="color: #666; margin-top: 15px;">Kevy provides lightning-fast execution and a clean interface.</p>
+    </div>
+
+    <div class="split-container">
+        <div class="panel">
+            <h2>External Execution</h2>
+            <p>Execute your favorite scripts with our keyless Indigo interface.</p>
+            <img src="kevy.png" alt="Executor UI" class="executor-preview">
+        </div>
+
+        <div class="panel">
+            <h2>Performance</h2>
+            <p>Optimized for low-end PCs and high-speed injection.</p>
+            
+            <div class="stat-bar">
+                <div class="icon-box">⚡</div>
+                <div class="stat-info">
+                    <span>Execution Speed</span>
+                    <b>Instant / 0.1ms</b>
+                </div>
+            </div>
+
+            <div class="stat-bar">
+                <div class="icon-box">🛡️</div>
+                <div class="stat-info">
+                    <span>Safety Status</span>
+                    <b style="color: #4ade80;">Fully Undetected</b>
+                </div>
+            </div>
+
+            <div class="stat-bar">
+                <div class="icon-box">💎</div>
+                <div class="stat-info">
+                    <span>Stability</span>
+                    <b>99.9% Uptime</b>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        const c = document.getElementById('c'), x = c.getContext('2d');
-        function r() { c.width = window.innerWidth; c.height = window.innerHeight; }
-        window.onresize = r; r();
-        let p = Array.from({length: 40}, () => ({x: Math.random()*c.width, y: Math.random()*c.height, s: Math.random()*2+1, l: Math.random()*30+10}));
-        function d() {
-            x.clearRect(0,0,c.width,c.height); x.strokeStyle = 'rgba(99, 102, 241, 0.4)';
-            p.forEach(i => { x.beginPath(); x.moveTo(i.x, i.y); x.lineTo(i.x, i.y+i.l); x.stroke(); i.y -= i.s; if(i.y < -50) i.y = c.height+50; });
-            requestAnimationFrame(d);
-        }
-        d();
-    </script>
+
+    <div class="download-area">
+        <a href="https://www.mediafire.com/file/90ns15tmh5x57n7/Kevy.zip/file" class="btn">DOWNLOAD KEVY</a>
+        <p style="margin-top: 20px; color: #444; font-size: 0.8rem;">Supported on Windows 10/11</p>
+    </div>
+
 </body>
 </html>
