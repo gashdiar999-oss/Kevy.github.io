@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,194 +7,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KEVY | #1 Indigo Executor</title>
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4338ca;
-            --bg: #050508;
-            --card-bg: rgba(10, 10, 15, 0.9);
+        :root { --primary: #6366f1; --bg: #050508; }
+        body { 
+            margin: 0; background: var(--bg); color: white; 
+            font-family: 'Inter', 'Segoe UI', sans-serif; overflow: hidden; 
         }
-
-        body {
-            margin: 0;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            overflow-x: hidden;
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        .vignette { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%); 
+            z-index: 2; pointer-events: none; 
         }
-
-        /* Xeno Background Rockets */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            filter: blur(1px);
+        .wrapper { 
+            position: relative; z-index: 10; display: flex; 
+            align-items: center; justify-content: center; height: 100vh; 
         }
-
-        /* Vignette effect (Xeno edge shadows) */
-        .vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
-            pointer-events: none;
-            z-index: 5;
+        .card { 
+            background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px); 
+            border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 30px; 
+            padding: 40px; width: 85%; max-width: 800px; text-align: center; 
+            box-shadow: 0 0 100px rgba(0,0,0,0.8);
         }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 100px 20px;
-            position: relative;
-            z-index: 10;
+        h1 { 
+            font-size: 5rem; font-weight: 900; margin: 0; letter-spacing: -3px;
+            background: linear-gradient(to bottom, #fff, var(--primary)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         }
-
-        /* Glassmorphism Card */
-        .xeno-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 28px;
-            padding: 60px 40px;
-            max-width: 950px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 80px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.1);
+        .status { color: #4ade80; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px; display: block; }
+        .btn { 
+            background: var(--primary); color: white; padding: 18px 45px; 
+            border-radius: 12px; font-weight: 800; text-decoration: none; 
+            display: inline-block; margin: 25px 0; transition: 0.3s; 
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); 
         }
-
-        .status-tag {
-            background: rgba(34, 197, 94, 0.1);
-            color: #4ade80;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            margin-bottom: 25px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-tag::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            background: #22c55e;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #22c55e;
-        }
-
-        h1 {
-            font-size: clamp(3.5rem, 12vw, 6rem);
-            font-weight: 900;
-            margin: 0;
-            letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff 40%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.sub-heading {
-            color: #94a3b8;
-            font-size: 1.25rem;
-            margin: 20px 0 40px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* MediaFire Download Button */
-        .download-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 20px 50px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 1.2rem;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-        }
-
-        .download-btn:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 15px 45px rgba(99, 102, 241, 0.6);
-        }
-
-        /* Showcase Screenshot */
-        .app-preview {
-            width: 100%;
-            margin-top: 50px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            transition: 0.5s;
-        }
-
-        .app-preview:hover {
-            border-color: var(--primary);
-        }
-
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 45px var(--primary); }
+        .preview { width: 100%; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
-
     <div class="vignette"></div>
-    <canvas id="bg-canvas"></canvas>
-
-    <div class="container">
-        <div class="xeno-card">
-            <div class="status-tag">Undetected</div>
+    <canvas id="c"></canvas>
+    <div class="wrapper">
+        <div class="card">
+            <span class="status">● UNDETECTED</span>
             <h1>KEVY</h1>
-            <p class="sub-heading">Experience the fastest execution speed. Built for performance, designed for indigo.</p>
+            <p style="color:#888;">Next-gen execution. Indigo speed.</p>
             
-            <a href="https://www.mediafire.com/file/YOUR_LINK_HERE" class="download-btn">DOWNLOAD NOW</a>
-            
-            <img src="kevy.png" alt="Kevy UI" class="app-preview">
+            <a href="https://www.mediafire.com/file/90ns15tmh5x57n7/Kevy.zip/file" class="btn">DOWNLOAD NOW</a>
+
+            <img src="kevy.png" alt="Executor UI" class="preview">
         </div>
     </div>
-
     <script>
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        const c = document.getElementById('c'), x = c.getContext('2d');
+        function r() { c.width = window.innerWidth; c.height = window.innerHeight; }
+        window.onresize = r; r();
+        let p = Array.from({length: 40}, () => ({x: Math.random()*c.width, y: Math.random()*c.height, s: Math.random()*2+1, l: Math.random()*30+10}));
+        function d() {
+            x.clearRect(0,0,c.width,c.height); x.strokeStyle = 'rgba(99, 102, 241, 0.4)';
+            p.forEach(i => { x.beginPath(); x.moveTo(i.x, i.y); x.lineTo(i.x, i.y+i.l); x.stroke(); i.y -= i.s; if(i.y < -50) i.y = c.height+50; });
+            requestAnimationFrame(d);
         }
-        window.onresize = resize;
-        resize();
-
-        let rockets = Array.from({length: 45}, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            speed: Math.random() * 2 + 0.5,
-            length: Math.random() * 50 + 10
-        }));
-
-        function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.3)';
-            ctx.lineWidth = 1.5;
-            rockets.forEach(r => {
-                ctx.beginPath();
-                ctx.moveTo(r.x, r.y);
-                ctx.lineTo(r.x, r.y + r.length);
-                ctx.stroke();
-                r.y -= r.speed;
-                if(r.y < -60) r.y = canvas.height + 60;
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
+        d();
     </script>
 </body>
 </html>
